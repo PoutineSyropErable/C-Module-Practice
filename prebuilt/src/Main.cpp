@@ -1,16 +1,24 @@
 // src/Main.cpp
+// module;
 #include "main_cpp.h"
-module;
+#include <iostream>
+#include <print>
+// export module MainBridge; // Optional: export a module if you want
 
 import A;
 import B;
 import C;
 import D;
 
-int main_cpp() {
+extern "C" int main_cpp() {
+    std::print("Start of greet A, {}\n", 1);
     greetA();
+    std::print("\nStart of greet B, {}\n", 1.5);
     greetB();
+    std::print("\nStart of greet C, {}\n", -1);
     greetC();
+    std::print("\nStart of greet D, {}\n", -2.65);
     greetD();
+    [[maybe_unused]] int x = FUNNY_NUMBER;
     return 0;
 }

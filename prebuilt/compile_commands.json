@@ -1,0 +1,104 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-std=c++23",
+      "--precompile",
+      "-x",
+      "c++-module",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/pcm/C.pcm",
+      "./src/mod1/C.cxx"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/C.cxx",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/pcm/C.pcm"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-c",
+      "-std=c++23",
+      "--precompile",
+      "-x",
+      "c++-module",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/pcm/D.pcm",
+      "./src/mod1/D.cxx"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/D.cxx",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/pcm/D.pcm"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++23",
+      "-c",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/obj/D_api.o",
+      "./src/mod1/D.cxx"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/D.cxx",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/D_api.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++23",
+      "-c",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/obj/C_impl.o",
+      "./src/mod1/C.cpp"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/C.cpp",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/C_impl.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++23",
+      "-c",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/obj/D_impl.o",
+      "./src/mod1/D.cpp"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/D.cpp",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/D_impl.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++23",
+      "-c",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
+      "./build/obj/Main_cpp.o",
+      "src/Main.cpp"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/Main.cpp",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/Main_cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-c",
+      "-o",
+      "./build/obj/Main.o",
+      "src/Main.c"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/Main.c",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/Main.o"
+  }
+]

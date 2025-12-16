@@ -1,10 +1,11 @@
 #pragma once
 
 #ifdef __cplusplus
-export "C" {
+extern "C" {
 #endif
 
-    void main_cpp();
+int main_cpp();
+#define FUNNY_NUMBER 69
 
 #ifdef __cplusplus
 }

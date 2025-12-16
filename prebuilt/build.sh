@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 #
 # ==================================================
-# BUILD SCRIPT — C++20 MODULES (RULE-EXPLICIT)
+# BUILD SCRIPT — c++23 MODULES (RULE-EXPLICIT)
 # ==================================================
 #
 # Naming rules enforced:
@@ -43,7 +43,7 @@ MOD1="./src/mod1"
 # First pass: extract its interface into a .pcm.
 
 printf "Precompiling a.cppm\n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	--precompile \
 	"$MOD1/A.cppm" \
 	-o "$PCM/A.pcm"
@@ -51,7 +51,7 @@ clang++ -std=c++20 \
 # ---- merged module B ----
 
 printf "Precompiling b.cppm\n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	--precompile \
 	"$MOD1/B.cppm" \
 	-o "$PCM/B.pcm" \
@@ -63,7 +63,7 @@ clang++ -std=c++20 \
 # C.cxx contains ONLY `export module C;` and exports.
 
 printf "Precompiling C.cxx \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	--precompile \
 	-x c++-module \
 	"$MOD1/C.cxx" \
@@ -73,7 +73,7 @@ clang++ -std=c++20 \
 # ---- split module D (API only) ----
 
 printf "Precompiling D.cxx \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	--precompile \
 	-x c++-module \
 	"$MOD1/D.cxx" \
@@ -91,14 +91,14 @@ clang++ -std=c++20 \
 # ---- merged module A (.cppm → .o) ----
 
 printf "Compiling interface A.cppm \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$PCM/A.pcm" \
 	-o "$OBJ"/A.o
 
 # ---- merged module B ----
 
 printf "Compiling interface B.cppm \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$PCM/B.pcm" \
 	-o "$OBJ"/B.o \
 	-fprebuilt-module-path="$PCM"
@@ -106,7 +106,7 @@ clang++ -std=c++20 \
 # ---- split module C API (.cxx → .o) ----
 
 printf "Compiling interface C.cxx \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$PCM/C.pcm" \
 	-o "$OBJ"/C_api.o \
 	-fprebuilt-module-path="$PCM"
@@ -114,7 +114,7 @@ clang++ -std=c++20 \
 # ---- split module D API ----
 
 printf "Compiling interface D.cxx \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$MOD1"/D.cxx \
 	-o "$OBJ/D_api.o" \
 	-fprebuilt-module-path="$PCM"
@@ -130,18 +130,18 @@ clang++ -std=c++20 \
 # ---- split module C implementation (.cpp) ----
 
 printf "Compiling implementation C.cpp \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$MOD1"/C.cpp \
-	-fprebuilt-module-path="$PCM" \
-	-o "$OBJ"/C_impl.o
+	-o "$OBJ"/C_impl.o \
+	-fprebuilt-module-path="$PCM"
 
 # ---- split module D implementation ----
 
 printf "Compiling implementation D.cpp \n\n"
-clang++ -std=c++20 \
+clang++ -std=c++23 \
 	-c "$MOD1"/D.cpp \
-	-fprebuilt-module-path="$PCM" \
-	-o "$OBJ"/D_impl.o
+	-o "$OBJ"/D_impl.o \
+	-fprebuilt-module-path="$PCM"
 
 # ==================================================
 # PHASE 4 — NON-MODULE FILES → .o
@@ -152,7 +152,8 @@ clang++ -std=c++20 \
 
 # ---- C++ TU that may import modules ----
 
-clang++ -std=c++20 \
+printf "Compiling Main.cpp \n\n"
+clang++ -std=c++23 \
 	-c src/Main.cpp \
 	-fprebuilt-module-path="$PCM" \
 	-o "$OBJ"/Main_cpp.o
@@ -181,3 +182,7 @@ clang++ \
 	"$OBJ"/D_api.o \
 	"$OBJ"/D_impl.o \
 	-o build/program
+
+printf -- "\n\n======Start of program========\n\n"
+
+./build/program
