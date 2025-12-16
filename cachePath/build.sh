@@ -1,36 +1,70 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# ==================================================
+# BUILD SCRIPT — c++23 MODULES (SINGLE-STEP)
+# ==================================================
+#
 
-# Set flags
-CXX=clang++
-CXXFLAGS="-std=gnu++23 -I./src -fmodules-cache-path=build/ppms"
+set -eou pipefail
 
-# Create build directories if they don't exist
-mkdir -p build/objects
-mkdir -p build/ppms
+BUILD="./build"
+mkdir -p "$BUILD"
 
-# ---------------------------
-# 1. Compile Main.cpp first (shuffled order)
-# ---------------------------
-# Main.cpp imports Mage, which in turn imports Fireball
-# Even though Fireball and Mage have not been compiled yet,
-# the compiler will automatically generate Fireball.ppm and Mage.ppm
-$CXX $CXXFLAGS -c src/Main.cpp -o build/objects/Main.o
+MOD1="./src/mod1"
 
-# ---------------------------
-# 2. Compile Mage.cppm (shuffled order)
-# ---------------------------
-# Mage.cppm imports Fireball
-# Fireball.ppm may already exist from previous step in cache
-$CXX $CXXFLAGS -c src/Mage.cppm -o build/objects/Mage.o
+# 🔥 REMOVE -fmodules-cache-path when using -fmodule-output
+CXXFLAGS=(
+	-std=c++23
+	-Wall
+	-Wextra
+	-fprebuilt-module-path="$BUILD" # Where to find .pcm files
+)
 
-# ---------------------------
-# 3. Compile Fireball.cppm (shuffled order)
-# ---------------------------
-# Fireball is the leaf module
-# If Fireball.ppm already exists from step 1, this will be fast / skipped
-$CXX $CXXFLAGS -c src/Fireball.cppm -o build/objects/Fireball.o
+printf "Compiling modules (generating .o and .pcm in one step)\n\n"
 
-# ---------------------------
-# 4. Link all object files
-# ---------------------------
-$CXX build/objects/Main.o build/objects/Mage.o build/objects/Fireball.o -o build/mygame
+# ---- Compile PRIMARY MODULE INTERFACES first ----
+
+# Build A first (B depends on it)
+printf "Compiling A.o and A.pcm\n\n"
+clang++ "${CXXFLAGS[@]}" -c "$MOD1/A.cppm" -o "$BUILD/A.o" -fmodule-output
+
+# Now B can find A.pcm in the build directory
+printf "Compiling B.o and B.pcm\n\n"
+clang++ "${CXXFLAGS[@]}" -c "$MOD1/B.cppm" -o "$BUILD/B.o" -fmodule-output
+
+# For .cxx files: -x c++-module MUST come BEFORE the input file
+printf "Compiling C interface\n\n"
+clang++ "${CXXFLAGS[@]}" -x c++-module -c "$MOD1/C.cxx" -o "$BUILD/C.o" -fmodule-output
+
+printf "Compiling D interface\n\n"
+clang++ "${CXXFLAGS[@]}" -x c++-module -c "$MOD1/D.cxx" -o "$BUILD/D.o" -fmodule-output
+
+# ---- Compile MODULE IMPLEMENTATIONS ----
+printf "Compiling C implementation\n\n"
+clang++ "${CXXFLAGS[@]}" -c "$MOD1/C.cpp" -o "$BUILD/C_impl.o"
+
+printf "Compiling D implementation\n\n"
+clang++ "${CXXFLAGS[@]}" -c "$MOD1/D.cpp" -o "$BUILD/D_impl.o"
+
+# ---- Compile MAIN files ----
+printf "Compiling Main.cpp\n\n"
+clang++ "${CXXFLAGS[@]}" -c src/Main.cpp -o "$BUILD/Main_cpp.o"
+
+printf "Compiling Main.c\n\n"
+clang -std=c23 -c src/Main.c -o "$BUILD/Main.o"
+
+# ---- Linking ----
+printf "Linking program\n\n"
+clang++ \
+	"$BUILD"/Main.o \
+	"$BUILD"/Main_cpp.o \
+	"$BUILD"/A.o "$BUILD"/B.o \
+	"$BUILD"/C_api.o "$BUILD"/C_impl.o \
+	"$BUILD"/D_api.o "$BUILD"/D_impl.o \
+	-o ./program
+
+# ---- Run ----
+printf "Running program\n\n"
+./program
+
+echo "✅ Build successful!"

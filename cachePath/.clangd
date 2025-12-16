@@ -1,0 +1,26 @@
+CompileFlags:
+  Add:
+    - -Wall
+    - -Wextra
+    - -I.
+    - -I./src
+    - -I./src/mod1
+
+---
+
+If:
+  PathMatch: .*\.c$
+CompileFlags:
+  Add:
+    - -std=c23
+
+---
+
+If:
+  PathMatch: .*\.((cpp)|(cxx)|(cppm))$
+CompileFlags:
+  Add:
+    - -std=c++23
+    - -fprebuilt-module-path=./build/pcm
+    - -fmodules-cache-path=./build/pcm
+
