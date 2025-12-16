@@ -90,34 +90,54 @@ clang++ -std=c++23 \
 
 # ---- merged module A (.cppm → .o) ----
 
-printf "Compiling interface A.cppm \n\n"
+printf "Compiling interface and implementation A.cppm \n\n"
 clang++ -std=c++23 \
 	-c "$PCM/A.pcm" \
 	-o "$OBJ"/A.o
 
 # ---- merged module B ----
 
-printf "Compiling interface B.cppm \n\n"
+printf "Compiling interface and implementation B.cppm \n\n"
 clang++ -std=c++23 \
 	-c "$PCM/B.pcm" \
 	-o "$OBJ"/B.o \
 	-fprebuilt-module-path="$PCM"
 
-# ---- split module C API (.cxx → .o) ----
+if true; then
+	# ---- split module C API (.pcm → .o) ----
 
-printf "Compiling interface C.cxx \n\n"
-clang++ -std=c++23 \
-	-c "$PCM/C.pcm" \
-	-o "$OBJ"/C_api.o \
-	-fprebuilt-module-path="$PCM"
+	# This is a clangd specific methods
+	printf "Compiling interface C.cpm \n\n"
+	clang++ -std=c++23 \
+		-c "$PCM/C.pcm" \
+		-o "$OBJ"/C_api.o \
+		-fprebuilt-module-path="$PCM"
 
-# ---- split module D API ----
+	# ---- split module D API (.pcm → .o) ----
+	printf "Compiling interface D.cpm \n\n"
+	clang++ -std=c++23 \
+		-c "$PCM/D.pcm" \
+		-o "$OBJ/D_api.o" \
+		-fprebuilt-module-path="$PCM"
+else
+	# ---- This will work with every compiler.
+	# But
 
-printf "Compiling interface D.cxx \n\n"
-clang++ -std=c++23 \
-	-c "$MOD1"/D.cxx \
-	-o "$OBJ/D_api.o" \
-	-fprebuilt-module-path="$PCM"
+	# ---- split module C API (.cxx → .o) ----
+	printf "Compiling interface C.cpm \n\n"
+	clang++ -std=c++23 \
+		-c "$MOD1/C.cxx" \
+		-o "$OBJ/C_api.o" \
+		-fprebuilt-module-path="$PCM"
+
+	# ---- split module D API (.cxx → .o) ----
+	printf "Compiling interface D.cpm \n\n"
+	clang++ -std=c++23 \
+		-c "$MOD1/D.cxx" \
+		-o "$OBJ/D_api.o" \
+		-fprebuilt-module-path="$PCM"
+
+fi
 
 # ==================================================
 # PHASE 3 — MODULE IMPLEMENTATIONS → .o
@@ -177,10 +197,10 @@ clang++ \
 	"$OBJ"/Main_cpp.o \
 	"$OBJ"/A.o \
 	"$OBJ"/B.o \
-	"$OBJ"/C_api.o \
 	"$OBJ"/C_impl.o \
-	"$OBJ"/D_api.o \
 	"$OBJ"/D_impl.o \
+	"$OBJ"/C_api.o \
+	"$OBJ"/D_api.o \
 	-o build/program
 
 printf -- "\n\n======Start of program========\n\n"

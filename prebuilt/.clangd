@@ -3,6 +3,8 @@ CompileFlags:
     - -Wall
     - -Wextra
     - -I.
+    - -I./src
+    - -I./src/mod1
 
 ---
 

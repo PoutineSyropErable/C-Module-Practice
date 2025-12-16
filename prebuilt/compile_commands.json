@@ -40,6 +40,20 @@
       "-c",
       "-fprebuilt-module-path=./build/pcm",
       "-o",
+      "./build/obj/C_api.o",
+      "./src/mod1/C.cxx"
+    ],
+    "directory": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt",
+    "file": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/src/mod1/C.cxx",
+    "output": "/home/francois/Documents/zzz__PersonalProjects/CppModulesGood/prebuilt/build/obj/C_api.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang++",
+      "-std=c++23",
+      "-c",
+      "-fprebuilt-module-path=./build/pcm",
+      "-o",
       "./build/obj/D_api.o",
       "./src/mod1/D.cxx"
     ],

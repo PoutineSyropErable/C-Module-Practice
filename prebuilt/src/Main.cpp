@@ -20,5 +20,10 @@ extern "C" int main_cpp() {
     std::print("\nStart of greet D, {}\n", -2.65);
     greetD();
     [[maybe_unused]] int x = FUNNY_NUMBER;
+
+    int c = lolc();
+    float d = lol_d();
+    std::print("\n C result: {}\n", c);
+    std::print("\n D result: {}\n", d);
     return 0;
 }
